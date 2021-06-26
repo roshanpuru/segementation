@@ -184,8 +184,8 @@ def keras_generator_train_val_test(batch_size, choice="train"):
             x_rand = random.choice(X)
             y_rand = x_rand[:-5] + "y.jpg"
 
-            x_path = f"{ImgDir}features/{x_rand}"
-            y_path = f"{ImgDir}labels/{y_rand}"
+            x_path = f"custom_dataset_human_black_background/features/{x_rand}"
+            y_path = f"custom_dataset_human_black_background/labels/{y_rand}"
 
             x = cv2.imread(x_path)
             y = cv2.imread(y_path)
