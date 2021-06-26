@@ -123,32 +123,32 @@ def generator_images(batch_size=1, ind=0):
         yield x_batch, y_batch
 
 
-for i in range(4731):
-    for x, y in generator_images(1, i):
-        break
+# for i in range(4731):
+#     for x, y in generator_images(1, i):
+#         break
+#
+#     base_dir_custom = "custom_dataset_human_black_background/"
+#     try:
+#         os.makedirs(f'{base_dir_custom}')
+#     except:
+#         pass
+#     try:
+#         os.makedirs(f'{base_dir_custom}features/')
+#     except:
+#         pass
+#     try:
+#         os.makedirs(f'{base_dir_custom}labels/')
+#     except:
+#         pass
+#
+#     x_name = f"{base_dir_custom}features/{i}_x.jpg"
+#     y_name = f"{base_dir_custom}labels/{i}_y.jpg"
+#     cv2.imwrite(x_name, x[0] * 255.)
+#     cv2.imwrite(y_name, y['seg'][0] * 255.)
 
-    base_dir_custom = "custom_dataset_human_black_background/"
-    try:
-        os.makedirs(f'{base_dir_custom}')
-    except:
-        pass
-    try:
-        os.makedirs(f'{base_dir_custom}features/')
-    except:
-        pass
-    try:
-        os.makedirs(f'{base_dir_custom}labels/')
-    except:
-        pass
 
-    x_name = f"{base_dir_custom}features/{i}_x.jpg"
-    y_name = f"{base_dir_custom}labels/{i}_y.jpg"
-    cv2.imwrite(x_name, x[0] * 255.)
-    cv2.imwrite(y_name, y['seg'][0] * 255.)
-
-
-features = os.listdir(f"{ImgDir}features/")
-labels = os.listdir(f"{ImgDir}labels/")
+features = os.listdir("custom_dataset_human_black_background/features/")
+labels = os.listdir("custom_dataset_human_black_background/labels/")
 
 print(len(features), len(labels))
 
