@@ -33,6 +33,8 @@ epochs = 50
 batch_size = 16
 ImgDir = "data/images/"
 
+run_opts = tf.RunOptions(report_tensor_allocations_upon_oom=True)
+
 # <Filter>:
 #      None(default): load all. each has a bbox. some instances have keypoint and some have mask annotations.
 #            images: 5081, instances: 13360
@@ -46,17 +48,17 @@ ochuman = OCHuman(AnnoFile='data/annotations/ochuman.json', Filter='segm')
 image_ids = ochuman.getImgIds()
 print('Total images: %d' % len(image_ids))
 
+
 def get_segmentation(data):
     img = cv2.imread(os.path.join(ImgDir, data['file_name']))
     height, width = data['height'], data['width']
 
     colors = [[255, 0, 0],
-            [255, 255, 0],
-            [0, 255, 0],
-            [0, 255, 255],
-            [0, 0, 255],
-            [255, 0, 255]]
-
+              [255, 255, 0],
+              [0, 255, 0],
+              [0, 255, 255],
+              [0, 0, 255],
+              [255, 0, 255]]
 
     for i, anno in enumerate(data['annotations']):
         bbox = anno['bbox']
@@ -67,10 +69,11 @@ def get_segmentation(data):
         # img = vistool.draw_bbox(img, bbox, thickness=3, color=colors[i%len(colors)])
         if segm is not None:
             mask = Poly2Mask(segm)
-            img = vistool.draw_mask(img, mask, thickness=3, color=colors[i%len(colors)])
+            img = vistool.draw_mask(img, mask, thickness=3, color=colors[i % len(colors)])
         # if kpt is not None:
         #     img = vistool.draw_skeleton(img, kpt, connection=None, colors=colors[i%len(colors)], bbox=bbox)
     return img
+
 
 def new_mask(real_img, m_img):
     real_img = real_img.reshape(1, -1)[0]
@@ -80,9 +83,9 @@ def new_mask(real_img, m_img):
 
     for i, j in zip(real_img, m_img):
         if i != j:
-            new.append(255) # human will white appear because of 255
+            new.append(255)  # human will white appear because of 255
         else:
-            new.append(0) # background will black appear because of 0, set i instead of 0 to do not change backgraound
+            new.append(0)  # background will black appear because of 0, set i instead of 0 to do not change backgraound
 
     new_np = np.array(new)
     new_np = new_np.reshape(512, 512, 3)
@@ -251,7 +254,7 @@ def get_model():
 
     metrics = {'seg': ['acc']
                }
-    model.compile(optimizer="adam", loss=losses, metrics=metrics)
+    model.compile(optimizer="adam", loss=losses, metrics=metrics, options=run_opts)
 
     return model
 
